@@ -31,59 +31,116 @@ var nTrain = new Train('The N Train', nStations);
 var sixTrain = new Train('The Six Train', sixStations);
 var gTrain = new Train('The G Train', gStations);
 
-var trains = [lTrain, nTrain, sixTrain, gTrain, sTrain];
 
-var msg = "Which train would you \nlike to get on?" + displayLines();
-var startTrain = prompt(msg);
 
 var trains = [lTrain, nTrain, sixTrain, gTrain];
 
-var msg = "Which train would you \nlike to get on?\n" + displayLines();
+while (startTrain != "q") {
+
+var msg = "Which train would you \nlike to get on?\n" + displayLines() + "\n or quit";
 var startTrain = prompt(msg);
+console.log(startTrain);
+
+
 
 function displayLines() {
   var trainNames = "";
-  for (var i = 0; i < trains.length; i++) {
-    trainNames += trains[i].name + "\n";
-  }
 
-  forEach(trains, trainName);
+  _.each(trains, function(train){
+      trainNames += train.name;
+  });
 
   return trainNames.trim();
 }
 
 
-function trainName(train){
-  return train.name + "\n"
-}
-
-function forEach(array, func) {
-  for (var i = 0; i < array.length; i++) {
-    func(array[i]);
-  }
-}
-
-function map(array, func) {
-  var newArray = [];
-  for (var i = 0; i < array.length; i++) {
-    newArray.push(func(array[i]));
-  }
-  return newArray;
-}
 
 function displayStations() {
-  var train = null;
-  for (var j = 0; j < trains.length; j++) {
-    if (trains[j].name === startTrain) {
-      train = trains[j];
-    }
+
+  var stationNames = "";
+  _.each(trains[startTrain].stations, function(station){
+    stationNames += station + "\n";
+    });
+  return stationNames.trim();
   }
-  var trainStations = "";
-  for (var k = 0; k < train.stations.length; k++) {
-    trainStations += train.stations[k] + "\n";
-  }
-  return trainStations.trim();
-}
+
 
 var msg2 = "Which station would you \nlike to get on?\n" + displayStations();
 var startStation = prompt(msg2);
+console.log(startStation);
+
+/////////////////
+
+var msg = "Which train would you \nlike to get off?\n" + displayLines();
+var offTrain = prompt(msg);
+
+function displayLines() {
+  var trainNames = "";
+
+  _.each(trains, function(train) {
+    trainNames += train.name + "\n";
+  });
+  return trainNames.trim();
+}
+
+
+function displayOffStations() {
+  var stationNames = "";
+  _.each(trains[offTrain].stations, function(station){
+    stationNames += station + "\n";
+    });
+  return stationNames.trim();
+  }
+
+
+var msg2 = "Which station would you \nlike to get off?\n" + displayOffStations();
+var offStation = prompt(msg2);
+console.log(offStation);
+
+
+//intersection
+function instersection(){
+_.intersection(trains[startStation].stations, trains[offStation].stations);
+}
+
+
+// logging a journey //
+function Journey(startLine, startStation, endLine, endStation) {
+  this.startLine = startLine;
+  this.startStation = startStation;
+  this.endLine = endLine;
+  this.endStation = endStation;
+}
+
+
+var journey = new Journey(startTrain, startStation, offTrain, offStation);
+
+var journeys = [];
+
+journeys.push(startTrain);
+
+var totalSpent = "$" + (journeys.length * 2.50);
+
+console.log(totalSpent);
+
+// calculating distance //
+if (startTrain === offTrain){
+    alert(trains[startTrain].distance(startStation,offStation) + " stops.");
+} else {
+    var leg1 = Math.abs(trains[startTrain].distance(startStation, "Union Square"));
+    var leg2 = Math.abs(trains[offTrain].distance(offStation, "Union Square"));
+    var distance = Math.abs(leg1 + leg2);
+
+    alert(distance + " stops.");
+}
+
+}
+
+
+
+
+
+
+
+
+
